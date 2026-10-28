@@ -1,0 +1,55 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="UrlChecker" 
+           Manufacturer="Personal" 
+           Version="$(var.ProductVersion)" 
+           UpgradeCode="4F9A6C2B-98F1-4E82-9C12-1C77F5B6A889"
+           Scope="perMachine">
+    
+    <MajorUpgrade Schedule="afterInstallInitialize" 
+                  DowngradeErrorMessage="Er is al een nieuwere versie van UrlChecker geïnstalleerd." 
+                  AllowSameVersionUpgrades="no" />
+    
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="UrlChecker" />
+    </StandardDirectory>
+
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="MainExecutable" Guid="*" Bitness="always64">
+        <File Id="UrlCheckerExe" Source="publish\UrlChecker.exe" KeyPath="yes" />
+
+        <RegistryKey Root="HKLM" Key="Software\Classes\UrlCheckerHTML">
+          <RegistryValue Type="string" Value="URL Checker Link Handler" />
+          <RegistryKey Key="shell\open\command">
+            <RegistryValue Type="string" Value="&quot;[#UrlCheckerExe]&quot; &quot;%1&quot;" />
+          </RegistryKey>
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\UrlChecker\Capabilities">
+          <RegistryValue Name="ApplicationDescription" Type="string" Value="Controleert en toont URLs voordat ze openen." />
+          <RegistryValue Name="ApplicationName" Type="string" Value="UrlChecker" />
+          <RegistryKey Key="URLAssociations">
+            <RegistryValue Name="http" Type="string" Value="UrlCheckerHTML" />
+            <RegistryValue Name="https" Type="string" Value="UrlCheckerHTML" />
+          </RegistryKey>
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\RegisteredApplications">
+          <RegistryValue Name="UrlChecker" Type="string" Value="Software\UrlChecker\Capabilities" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM" Key="Software\Classes\http\shell\open\command">
+          <RegistryValue Type="string" Value="&quot;[#UrlCheckerExe]&quot; &quot;%1&quot;" />
+        </RegistryKey>
+        <RegistryKey Root="HKLM" Key="Software\Classes\https\shell\open\command">
+          <RegistryValue Type="string" Value="&quot;[#UrlCheckerExe]&quot; &quot;%1&quot;" />
+        </RegistryKey>
+      </Component>
+    </ComponentGroup>
+
+    <Feature Id="ProductFeature" Title="UrlChecker" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Package>
+</Wix>

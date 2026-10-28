@@ -1,0 +1,15 @@
+﻿## Build & Publish
+bin/
+obj/
+publish/
+*.msi
+*.wixobj
+*.wixpdb
+
+## IDE & OS
+.vs/
+.vscode/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
